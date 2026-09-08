@@ -1,0 +1,18 @@
+.flower {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.spinning {
+  animation: spin 1.4s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -15,6 +15,16 @@ const availableFeatures = [
   // ACTIVATION_TOKEN
   "read:activation_token",
 
+  // TASK
+  "create:task",
+  "read:task",
+  "update:task",
+  "delete:task",
+
+  // CATEGORY
+  "create:category",
+  "read:category",
+
   // MIGRATIONS
   "create:migration",
   "read:migration",
@@ -38,6 +48,14 @@ function can(user, feature, resource) {
     authorized = false;
 
     if (user.id === resource.id || can(user, "update:user:others")) {
+      authorized = true;
+    }
+  }
+
+  if (["update:task", "delete:task"].includes(feature) && resource) {
+    authorized = false;
+
+    if (user.id === resource.user_id) {
       authorized = true;
     }
   }
@@ -96,6 +114,43 @@ function filterOutput(user, feature, resource) {
       expires_at: resource.expires_at,
       used_at: resource.used_at,
     };
+  }
+
+  if (feature === "read:task") {
+    const filterTask = (task) => ({
+      id: task.id,
+      title: task.title,
+      date:
+        task.date instanceof Date
+          ? task.date.toISOString().slice(0, 10)
+          : task.date,
+      time: task.time || null,
+      is_urgent: task.is_urgent,
+      category_id: task.category_id,
+      completed_at: task.completed_at
+        ? new Date(task.completed_at).toISOString()
+        : null,
+      created_at: new Date(task.created_at).toISOString(),
+      updated_at: new Date(task.updated_at).toISOString(),
+    });
+
+    return Array.isArray(resource)
+      ? resource.map(filterTask)
+      : filterTask(resource);
+  }
+
+  if (feature === "read:category") {
+    const filterCategory = (category) => ({
+      id: category.id,
+      name: category.name,
+      color: category.color,
+      created_at: new Date(category.created_at).toISOString(),
+      updated_at: new Date(category.updated_at).toISOString(),
+    });
+
+    return Array.isArray(resource)
+      ? resource.map(filterCategory)
+      : filterCategory(resource);
   }
 
   if (feature === "read:migration") {

@@ -1,0 +1,79 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 32px;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-righteous), cursive;
+  font-size: 1.3rem;
+  color: var(--color-primary);
+}
+
+.logout {
+  border: none;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+
+.logout:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.content {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 20px 12px 32px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: stretch;
+}
+
+/* Trava a altura do card de categorias na altura do card de agenda,
+   para que a lista role dentro dele em vez de esticar a linha. */
+.categoryCell {
+  position: relative;
+  min-height: 240px;
+}
+
+.categoryCell > * {
+  position: absolute;
+  inset: 0;
+}
+
+@media (max-width: 800px) {
+  .cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .categoryCell {
+    position: static;
+    min-height: 0;
+  }
+
+  .categoryCell > * {
+    position: static;
+    max-height: 340px;
+  }
+}

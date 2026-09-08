@@ -1,0 +1,21 @@
+.header {
+  margin-bottom: 12px;
+}
+
+.intro {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.greeting {
+  font-family: var(--font-righteous), cursive;
+  font-size: 1.6rem;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.date {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin: 4px 0 0;
+}

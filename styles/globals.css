@@ -1,0 +1,39 @@
+:root {
+  --color-bg: #f2f0ef;
+  --color-surface: #ffffff;
+  --color-primary: #a47dab;
+  --color-primary-dark: #8a5f92;
+  --color-primary-light: #ecdfee;
+  --color-text: #3d3540;
+  --color-text-muted: #8a8290;
+  --color-danger: #c0546b;
+  --color-danger-bg: #fbe9ed;
+  --radius-card: 16px;
+  --radius-control: 12px;
+  --shadow-card: 0 8px 24px rgba(164, 125, 171, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+body {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input {
+  font-family: inherit;
+}

@@ -1,0 +1,77 @@
+.strip {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: var(--color-surface);
+  border-radius: 999px;
+  padding: 8px 10px;
+  min-width: 46px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.day:hover:not(:disabled) {
+  background: var(--color-primary-light);
+}
+
+.day:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.arrow {
+  border: none;
+  background: none;
+  color: var(--color-primary);
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 8px 4px;
+  cursor: pointer;
+  align-self: center;
+}
+
+.arrow:hover:not(:disabled) {
+  color: var(--color-primary-dark);
+}
+
+.arrow:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.dayNumber {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.weekday {
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+}
+
+.today {
+  box-shadow: inset 0 0 0 1.5px var(--color-primary);
+}
+
+.selected {
+  background: var(--color-primary);
+}
+
+.selected .dayNumber,
+.selected .weekday {
+  color: #fff;
+}
