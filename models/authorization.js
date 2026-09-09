@@ -24,6 +24,8 @@ const availableFeatures = [
   // CATEGORY
   "create:category",
   "read:category",
+  "update:category",
+  "delete:category",
 
   // MIGRATIONS
   "create:migration",
@@ -52,7 +54,14 @@ function can(user, feature, resource) {
     }
   }
 
-  if (["update:task", "delete:task"].includes(feature) && resource) {
+  const ownedResourceFeatures = [
+    "update:task",
+    "delete:task",
+    "update:category",
+    "delete:category",
+  ];
+
+  if (ownedResourceFeatures.includes(feature) && resource) {
     authorized = false;
 
     if (user.id === resource.user_id) {

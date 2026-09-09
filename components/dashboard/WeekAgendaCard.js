@@ -42,6 +42,10 @@ export default function WeekAgendaCard({
     categories.map((category) => [category.id, category]),
   );
 
+  const completedCount = tasks.filter((task) => task.completed_at).length;
+  const percentage =
+    tasks.length === 0 ? 0 : Math.round((completedCount / tasks.length) * 100);
+
   return (
     <section className={styles.card}>
       <div className={styles.header}>
@@ -68,6 +72,18 @@ export default function WeekAgendaCard({
             ›
           </button>
         </div>
+      </div>
+
+      <div className={styles.progress}>
+        <div className={styles.progressBarTrack}>
+          <div
+            className={styles.progressBarFill}
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+        <span className={styles.progressLabel}>
+          {percentage}% da semana concluído ({completedCount}/{tasks.length})
+        </span>
       </div>
 
       {loading ? (

@@ -25,6 +25,8 @@ async function postHandler(request, response) {
     "delete:task",
     "create:category",
     "read:category",
+    "update:category",
+    "delete:category",
   ]);
 
   const secureOutputValues = authorization.filterOutput(

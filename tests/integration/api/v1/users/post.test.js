@@ -41,6 +41,8 @@ describe("POST /api/v1/users", () => {
           "delete:task",
           "create:category",
           "read:category",
+          "update:category",
+          "delete:category",
         ],
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,

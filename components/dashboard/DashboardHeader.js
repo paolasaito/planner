@@ -7,13 +7,20 @@ export default function DashboardHeader({
   selectedDate,
   today,
   onSelectDate,
+  onAddClick,
   isLoadingDay,
 }) {
   return (
     <div className={styles.header}>
       <div className={styles.intro}>
-        <h1 className={styles.greeting}>Olá, {username}!</h1>
-        <p className={styles.date}>{formattedDate}</p>
+        <div>
+          <h1 className={styles.greeting}>Olá, {username}!</h1>
+          <p className={styles.date}>{formattedDate}</p>
+        </div>
+
+        <button type="button" className={styles.addButton} onClick={onAddClick}>
+          + Nova tarefa
+        </button>
       </div>
 
       <WeekStrip

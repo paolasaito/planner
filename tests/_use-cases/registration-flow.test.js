@@ -43,6 +43,8 @@ describe("Use case: Registration Flow (all successful)", () => {
         "delete:task",
         "create:category",
         "read:category",
+        "update:category",
+        "delete:category",
       ],
       created_at: createUserResponseBody.created_at,
       updated_at: createUserResponseBody.updated_at,

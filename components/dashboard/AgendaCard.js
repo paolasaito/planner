@@ -1,3 +1,4 @@
+import FlowerIcon from "components/icons/FlowerIcon";
 import TaskItem from "./TaskItem";
 import styles from "./AgendaCard.module.css";
 
@@ -6,7 +7,6 @@ export default function AgendaCard({
   categories,
   onToggleTask,
   onEditTask,
-  onAddClick,
 }) {
   const categoriesById = Object.fromEntries(
     categories.map((category) => [category.id, category]),
@@ -16,14 +16,11 @@ export default function AgendaCard({
   const percentage =
     tasks.length === 0 ? 0 : Math.round((completedCount / tasks.length) * 100);
 
+  const allCompleted = tasks.length > 0 && completedCount === tasks.length;
+
   return (
     <section className={styles.card}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Agenda do dia</h2>
-        <button type="button" className={styles.addButton} onClick={onAddClick}>
-          + Nova tarefa
-        </button>
-      </div>
+      <h2 className={styles.title}>Agenda do dia</h2>
 
       <div className={styles.progress}>
         <div className={styles.progressBarTrack}>
@@ -36,6 +33,22 @@ export default function AgendaCard({
           {percentage}% do dia concluído ({completedCount}/{tasks.length})
         </span>
       </div>
+
+      {allCompleted && (
+        <div className={styles.celebration}>
+          <FlowerIcon
+            size={40}
+            color="var(--color-primary)"
+            className={styles.celebrationFlower}
+          />
+          <div>
+            <p className={styles.celebrationTitle}>Parabéns!</p>
+            <p className={styles.celebrationText}>
+              Você concluiu todas as tarefas do dia. Seu jardim floresceu hoje.
+            </p>
+          </div>
+        </div>
+      )}
 
       {tasks.length === 0 ? (
         <p className={styles.empty}>

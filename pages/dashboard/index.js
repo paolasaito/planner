@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Head from "next/head";
 import * as cookie from "cookie";
 import session from "models/session.js";
 import user from "models/user.js";
@@ -13,6 +14,7 @@ import CategoryProgressCard from "components/dashboard/CategoryProgressCard";
 import WeekAgendaCard from "components/dashboard/WeekAgendaCard";
 import TaskModal from "components/dashboard/TaskModal";
 import TaskCreatedPopup from "components/dashboard/TaskCreatedPopup";
+import CategoriesModal from "components/dashboard/CategoriesModal";
 import styles from "./Dashboard.module.css";
 
 export async function getServerSideProps({ req }) {
@@ -64,6 +66,7 @@ export default function DashboardPage({
   const [taskBeingEdited, setTaskBeingEdited] = useState(null);
   const [isTaskModalOpen, setTaskModalOpen] = useState(false);
   const [isCreatedPopupOpen, setCreatedPopupOpen] = useState(false);
+  const [isCategoriesModalOpen, setCategoriesModalOpen] = useState(false);
   const [isLoadingDay, setLoadingDay] = useState(false);
   const [tasksVersion, setTasksVersion] = useState(0);
 
@@ -198,6 +201,51 @@ export default function DashboardPage({
     setCategories((previous) => [...previous, newCategory]);
   }
 
+  async function handleUpdateCategory(categoryToUpdate, values) {
+    const response = await fetch(`/api/v1/categories/${categoryToUpdate.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+
+    if (!response.ok) {
+      const body = await response.json();
+      throw new Error(body.message || "Não foi possível salvar a categoria.");
+    }
+
+    const updatedCategory = await response.json();
+    setCategories((previous) =>
+      previous.map((item) =>
+        item.id === updatedCategory.id ? updatedCategory : item,
+      ),
+    );
+  }
+
+  async function handleDeleteCategory(categoryToDelete) {
+    const response = await fetch(`/api/v1/categories/${categoryToDelete.id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const body = await response.json();
+      throw new Error(body.message || "Não foi possível excluir a categoria.");
+    }
+
+    setCategories((previous) =>
+      previous.filter((item) => item.id !== categoryToDelete.id),
+    );
+
+    // As tarefas que usavam a categoria ficam sem categoria.
+    setTasks((previous) =>
+      previous.map((item) =>
+        item.category_id === categoryToDelete.id
+          ? { ...item, category_id: null }
+          : item,
+      ),
+    );
+    setTasksVersion((previous) => previous + 1);
+  }
+
   async function handleLogout() {
     await fetch("/api/v1/sessions", { method: "DELETE" });
     window.location.href = "/login";
@@ -205,6 +253,10 @@ export default function DashboardPage({
 
   return (
     <div className={styles.page}>
+      <Head>
+        <title>Bloomy</title>
+      </Head>
+
       <header className={styles.topBar}>
         <div className={styles.brand}>
           <FlowerIcon size={32} color="var(--color-primary)" />
@@ -222,6 +274,7 @@ export default function DashboardPage({
           selectedDate={selectedDate}
           today={today}
           onSelectDate={handleSelectDate}
+          onAddClick={handleOpenNewTask}
           isLoadingDay={isLoadingDay}
         />
 
@@ -231,11 +284,14 @@ export default function DashboardPage({
             categories={categories}
             onToggleTask={handleToggleTask}
             onEditTask={handleEditTask}
-            onAddClick={handleOpenNewTask}
           />
 
           <div className={styles.categoryCell}>
-            <CategoryProgressCard tasks={tasks} categories={categories} />
+            <CategoryProgressCard
+              tasks={tasks}
+              categories={categories}
+              onOpenCategories={() => setCategoriesModalOpen(true)}
+            />
           </div>
         </div>
 
@@ -256,6 +312,15 @@ export default function DashboardPage({
           onSubmit={handleSubmitTask}
           onDelete={handleDeleteTask}
           onCreateCategory={handleCreateCategory}
+        />
+      )}
+
+      {isCategoriesModalOpen && (
+        <CategoriesModal
+          categories={categories}
+          onClose={() => setCategoriesModalOpen(false)}
+          onUpdate={handleUpdateCategory}
+          onDelete={handleDeleteCategory}
         />
       )}
 

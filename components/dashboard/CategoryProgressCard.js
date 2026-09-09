@@ -6,12 +6,25 @@ const UNCATEGORIZED = {
   color: "#c9bcce",
 };
 
-export default function CategoryProgressCard({ tasks, categories }) {
+export default function CategoryProgressCard({
+  tasks,
+  categories,
+  onOpenCategories,
+}) {
   const groups = buildGroups(tasks, categories);
 
   return (
     <section className={styles.card}>
-      <h2 className={styles.title}>Tarefas por categoria</h2>
+      <div className={styles.header}>
+        <h2 className={styles.title}>Tarefas por categoria</h2>
+        <button
+          type="button"
+          className={styles.manageButton}
+          onClick={onOpenCategories}
+        >
+          Ver categorias
+        </button>
+      </div>
 
       {groups.length === 0 ? (
         <p className={styles.empty}>

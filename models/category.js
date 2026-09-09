@@ -65,10 +65,62 @@ async function findOneById(id) {
   return results.rows[0];
 }
 
+async function update(id, { name, color }) {
+  const results = await database.query({
+    text: `
+      UPDATE
+        categories
+      SET
+        name = $2,
+        color = $3,
+        updated_at = timezone('utc', now())
+      WHERE
+        id = $1
+      RETURNING
+        *
+    ;`,
+    values: [id, name, color],
+  });
+
+  return results.rows[0];
+}
+
+async function remove(id) {
+  // Tarefas não têm FK para categoria, então a referência é limpa aqui.
+  await database.query({
+    text: `
+      UPDATE
+        tasks
+      SET
+        category_id = NULL,
+        updated_at = timezone('utc', now())
+      WHERE
+        category_id = $1
+    ;`,
+    values: [id],
+  });
+
+  const results = await database.query({
+    text: `
+      DELETE FROM
+        categories
+      WHERE
+        id = $1
+      RETURNING
+        *
+    ;`,
+    values: [id],
+  });
+
+  return results.rows[0];
+}
+
 const category = {
   create,
   findAllByUserId,
   findOneById,
+  update,
+  remove,
 };
 
 export default category;
